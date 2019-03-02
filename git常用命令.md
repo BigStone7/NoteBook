@@ -31,7 +31,7 @@
 
   仓库初始化完成后会生成.git文件，里面记录了你的数据和资源。
 
-* **将文件提交到暂存区**
+* **ADD: 将文件提交到暂存区**
 
   全部提交
 
@@ -45,13 +45,69 @@
   git add [提交文件]
   ```
 
-* **将暂存区的文件提交到本地仓库**
+* **commit：将暂存区的文件提交到本地仓库**
 
   ```git
    git commit -m "本次提交备注的信息"
   ```
 
   备注信息非常重要，可以让你看日志的时候知道具体那次的提交做了什么事。
+
+  如果备注信息出错可以这样修改：
+
+  ```git
+  # 最近一次的备注信息修改
+  git commit --amend
+  
+  # 多版本前的备注信息修改可以通过变基实现
+  ```
+
+* **变基**
+
+  ```git
+  git rebase -i [要修改版本的父版本号]
+  ```
+
+  你会得到下面内容(我的例子）：
+
+  ```shell
+  pick 6425727 再次更新git文章
+  pick 9c587d6 第三次修改git文章
+  pick be660a8 fix
+  
+  # Rebase 6f08b2f..be660a8 onto 6f08b2f (3 commands)
+  #
+  # Commands:
+  # p, pick <commit> = use commit
+  # r, reword <commit> = use commit, but edit the commit message
+  # e, edit <commit> = use commit, but stop for amending
+  # s, squash <commit> = use commit, but meld into previous commit
+  # f, fixup <commit> = like "squash", but discard this commit's log message
+  # x, exec <command> = run command (the rest of the line) using shell
+  # b, break = stop here (continue rebase later with 'git rebase --continue')
+  # d, drop <commit> = remove commit
+  # l, label <label> = label current HEAD with a name
+  # t, reset <label> = reset HEAD to a label
+  # m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+  # .       create a merge commit using the original merge commit's
+  # .       message (or the oneline, if no original merge commit was
+  # .       specified). Use -c <commit> to reword the commit message.
+  #
+  # These lines can be re-ordered; they are executed from top to bottom.
+  #
+  # If you remove a line here THAT COMMIT WILL BE LOST.
+  #
+  # However, if you remove everything, the rebase will be aborted.
+  #
+  # Note that empty commits are commented out
+  
+  ```
+
+  因为我需要对备注信息修改，所以不能选择pick命令，选择第二项 `reword`,其他命令有相应的解释，自己查看；
+
+  ![1551527682843](img/1551527682843.png)
+
+  保存后，会弹出需要修改的文件，修改保存即可；
 
 * **配置忽略文件**
 
@@ -96,7 +152,7 @@
   对比本地工作区和暂存区之间的差异
 
   ```git
-  git diff
+  git diff 
   ```
 
   对比暂存区和上次提交版本之间的差异
@@ -104,6 +160,19 @@
   ```git
   git diff --cached
   ```
+
+  对比两个版本之间的差异
+
+  ```git
+  git diff [版本1] [版本2]
+  
+  # 此版本和上一版本比较
+  git diff HEAD HEAD^
+  ```
+
+* **HEAD**
+
+  表示当前版本的指向，上一版本可以`HEAD^`或`HEAD~1`；
 
 * **移除文件**
 
@@ -155,8 +224,14 @@
     git branch -v
   ```
 
+* **删除分支**
+
+  ```git
+  git branch -d [分支名]
+  ```
+
   
 
-### git会遇到的问题
+### Git会遇到的问题
 
 *  **分离头指针（detached HEAD)**： 指的是没有把头指针和分支绑定到一起，会造成分支切换后，数据丢失；根据提示创建新的分支就可以解决。
